@@ -1,0 +1,9 @@
+# OS
+.DS_Store
+
+# VSCode
+.vscode/
+*.code-workspace
+
+# Build files
+build/
