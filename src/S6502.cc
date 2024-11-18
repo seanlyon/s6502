@@ -6,6 +6,7 @@ S6502::S6502(Bus& bus)
 {
     opcodes = {
         {0xA9, {"LDA", &S6502::IMM, &S6502::LDA, 2}},
+        {0xA5, {"LDA", &S6502::ZP, &S6502::LDA, 3}},
     };
 }
 
@@ -84,6 +85,13 @@ void S6502::setFlag(StatusFlag flag, bool condition)
 uint8_t S6502::IMM()
 {
     addrBus = programCounter++;
+    dataBus = bus.read(addrBus);
+    return 0;
+}
+
+uint8_t S6502::ZP()
+{
+    addrBus = bus.read(programCounter++);
     dataBus = bus.read(addrBus);
     return 0;
 }
