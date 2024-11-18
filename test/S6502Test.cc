@@ -23,6 +23,12 @@ class S6502Test : public testing::Test {
     uint16_t getProgramCounter() const { return cpu.programCounter; }
 
     uint8_t getOpcode() const { return cpu.opcode; }
+
+    void loadMemory(const std::vector<uint8_t>& data, uint16_t startAddr = 0x0000) {
+        for (size_t i = 0; i < data.size(); ++i) {
+            bus.write(startAddr, data.at(i));
+        }
+    }
 };
 
 TEST_F(S6502Test, InitialState) {
