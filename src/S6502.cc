@@ -107,8 +107,8 @@ uint8_t S6502::ZPX()
 
 uint8_t S6502::ABS()
 {
-    uint16_t highByte = bus.read(programCounter++);
     uint16_t lowByte = bus.read(programCounter++);
+    uint16_t highByte = bus.read(programCounter++);
     addrBus = (highByte << 8) | lowByte;
     dataBus = bus.read(addrBus);
     return 0;
