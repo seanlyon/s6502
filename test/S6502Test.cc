@@ -75,3 +75,14 @@ TEST_F(S6502Test, LdaZeroPageX) {
     EXPECT_FALSE(getProcessStatus() & S6502::Zero);
     EXPECT_FALSE(getProcessStatus() & S6502::Negative);
 }
+
+TEST_F(S6502Test, LdaAbsolute) {
+    loadMemory({0xAD, 0x04, 0x00, 0x00, 0x13});
+    cpu.clock();
+
+    EXPECT_EQ(getAccumulator(), 0x13);
+    EXPECT_EQ(getProgramCounter(), 3);
+
+    EXPECT_FALSE(getProcessStatus() & S6502::Zero);
+    EXPECT_FALSE(getProcessStatus() & S6502::Negative);
+}
