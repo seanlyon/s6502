@@ -62,6 +62,7 @@ private:
 
     uint8_t IMM();
     uint8_t ZP();
+    uint8_t ZPX();
 
 //
 // Operations
