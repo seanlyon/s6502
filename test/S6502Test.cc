@@ -26,7 +26,7 @@ class S6502Test : public testing::Test {
 
     void loadMemory(const std::vector<uint8_t>& data, uint16_t startAddr = 0x0000) {
         for (size_t i = 0; i < data.size(); ++i) {
-            bus.write(startAddr, data.at(i));
+            cpu.bus.write(startAddr + i, data.at(i));
         }
     }
 };
@@ -50,6 +50,6 @@ TEST_F(S6502Test, LdaImmediate) {
     EXPECT_EQ(getAccumulator(), 0);
     EXPECT_EQ(getProgramCounter(), 2);
 
-    EXPECT_FALSE(getProcessStatus() & S6502::Zero);
+    EXPECT_TRUE(getProcessStatus() & S6502::Zero);
     EXPECT_FALSE(getProcessStatus() & S6502::Negative);
 }
