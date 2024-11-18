@@ -14,15 +14,6 @@ public:
     void clock();
     void log();
 
-private:
-    void fetch();
-    void decode();
-    void execute();
-
-    Bus bus;
-    uint8_t dataBus;
-    uint16_t addrBus;
-
     enum StatusFlag
     {
         Carry = (1 << 0),
@@ -34,6 +25,15 @@ private:
         Overflow = (1 << 6),
         Negative = (1 << 7)
     };
+
+private:
+    void fetch();
+    void decode();
+    void execute();
+
+    Bus bus;
+    uint8_t dataBus;
+    uint16_t addrBus;
 
     void setFlag(StatusFlag flag, bool condition);
 

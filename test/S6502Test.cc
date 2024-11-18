@@ -23,6 +23,12 @@ class S6502Test : public testing::Test {
     uint16_t getProgramCounter() const { return cpu.programCounter; }
 
     uint8_t getOpcode() const { return cpu.opcode; }
+
+    void loadMemory(const std::vector<uint8_t>& data, uint16_t startAddr = 0x0000) {
+        for (size_t i = 0; i < data.size(); ++i) {
+            cpu.bus.write(startAddr + i, data.at(i));
+        }
+    }
 };
 
 TEST_F(S6502Test, InitialState) {
@@ -35,4 +41,15 @@ TEST_F(S6502Test, InitialState) {
     EXPECT_EQ(getAccumulator(), 0);
     EXPECT_EQ(getProgramCounter(), 0);
     EXPECT_EQ(getOpcode(), 0);
+}
+
+TEST_F(S6502Test, LdaImmediate) {
+    loadMemory({0xA9, 0x00});
+    cpu.clock();
+
+    EXPECT_EQ(getAccumulator(), 0);
+    EXPECT_EQ(getProgramCounter(), 2);
+
+    EXPECT_TRUE(getProcessStatus() & S6502::Zero);
+    EXPECT_FALSE(getProcessStatus() & S6502::Negative);
 }
