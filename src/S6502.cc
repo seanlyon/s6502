@@ -8,7 +8,9 @@ S6502::S6502(Bus& bus)
         {0xA9, {"LDA", &S6502::IMM, &S6502::LDA, 2}},
         {0xA5, {"LDA", &S6502::ZP, &S6502::LDA, 3}},
         {0xB5, {"LDA", &S6502::ZPX, &S6502::LDA, 4}},
-        {0xAD, {"LDA", &S6502::ABS, &S6502::LDA, 4}}
+        {0xAD, {"LDA", &S6502::ABS, &S6502::LDA, 4}},
+        {0xBD, {"LDA", &S6502::ABSX, &S6502::LDA, 4}},
+        {0xB9, {"LDA", &S6502::ABSY, &S6502::LDA, 4}},
     };
 }
 
@@ -111,6 +113,26 @@ uint8_t S6502::ABS()
     uint16_t highByte = bus.read(programCounter++);
     addrBus = (highByte << 8) | lowByte;
     dataBus = bus.read(addrBus);
+    return 0;
+}
+
+uint8_t S6502::ABSX()
+{
+    uint16_t lowByte = bus.read(programCounter++);
+    uint16_t highByte = bus.read(programCounter++);
+    addrBus = ((highByte << 8) | lowByte) + xIndex;
+    dataBus = bus.read(addrBus);
+    // todo: return 1 if page boundary crossed
+    return 0;
+}
+
+uint8_t S6502::ABSY()
+{
+    uint16_t lowByte = bus.read(programCounter++);
+    uint16_t highByte = bus.read(programCounter++);
+    addrBus = ((highByte << 8) | lowByte) + yIndex;
+    dataBus = bus.read(addrBus);
+    // todo: return 1 if page boundary crossed
     return 0;
 }
 
