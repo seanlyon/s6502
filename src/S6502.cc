@@ -7,6 +7,7 @@ S6502::S6502(Bus& bus)
     opcodes = {
         {0xA9, {"LDA", &S6502::IMM, &S6502::LDA, 2}},
         {0xA5, {"LDA", &S6502::ZP, &S6502::LDA, 3}},
+        {0xB5, {"LDA", &S6502::ZPX, &S6502::LDA, 4}}
     };
 }
 
@@ -92,6 +93,13 @@ uint8_t S6502::IMM()
 uint8_t S6502::ZP()
 {
     addrBus = bus.read(programCounter++);
+    dataBus = bus.read(addrBus);
+    return 0;
+}
+
+uint8_t S6502::ZPX()
+{
+    addrBus = (bus.read(programCounter++) + xIndex) & 0x00FF;
     dataBus = bus.read(addrBus);
     return 0;
 }
