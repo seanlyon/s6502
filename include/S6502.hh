@@ -66,6 +66,7 @@ private:
     uint8_t ABS();
     uint8_t ABSX();
     uint8_t ABSY();
+    uint8_t INDX();
 
 //
 // Operations
