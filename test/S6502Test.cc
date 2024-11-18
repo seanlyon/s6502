@@ -53,3 +53,14 @@ TEST_F(S6502Test, LdaImmediate) {
     EXPECT_TRUE(getProcessStatus() & S6502::Zero);
     EXPECT_FALSE(getProcessStatus() & S6502::Negative);
 }
+
+TEST_F(S6502Test, LdaZeroPage) {
+    loadMemory({0xA5, 0x04, 0x00, 0x00, 0x13});
+    cpu.clock();
+
+    EXPECT_EQ(getAccumulator(), 0x13);
+    EXPECT_EQ(getProgramCounter(), 2);
+
+    EXPECT_FALSE(getProcessStatus() & S6502::Zero);
+    EXPECT_FALSE(getProcessStatus() & S6502::Negative);
+}
