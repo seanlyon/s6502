@@ -63,6 +63,7 @@ private:
     uint8_t IMM();
     uint8_t ZP();
     uint8_t ZPX();
+    uint8_t ZPY();
     uint8_t ABS();
     uint8_t ABSX();
     uint8_t ABSY();

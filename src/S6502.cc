@@ -108,6 +108,13 @@ uint8_t S6502::ZPX()
     return 0;
 }
 
+uint8_t S6502::ZPY()
+{
+    addrBus = (bus.read(programCounter++) + yIndex) & 0x0FF;
+    dataBus = bus.read(addrBus);
+    return 0;
+}
+
 uint8_t S6502::ABS()
 {
     uint16_t lowByte = bus.read(programCounter++);
