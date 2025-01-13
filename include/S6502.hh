@@ -70,6 +70,9 @@ private:
     uint8_t INDX();
     uint8_t INDY();
     uint8_t IND();
+    uint8_t ACC();
+    uint8_t IMP();
+    uint8_t REL();
 
 //
 // Operations

@@ -166,6 +166,21 @@ uint8_t S6502::IND()
     return 0;
 }
 
+uint8_t S6502::ACC()
+{
+    return 0;
+}
+
+uint8_t S6502::IMP()
+{
+    return 0;
+}
+
+uint8_t S6502::REL()
+{
+    addrBus = programCounter++;
+}
+
 //
 // Operations
 //
