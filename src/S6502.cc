@@ -154,6 +154,17 @@ uint8_t S6502::INDX()
     return 0;
 }
 
+uint8_t S6502::INDY()
+{
+    uint16_t zpAddr = bus.read(programCounter++);
+    uint16_t sum = bus.read(zpAddr++) + yIndex;
+    uint16_t lowByte = sum & 0x00FF;
+    uint16_t highByte = bus.read(zpAddr) + (sum & 0xFF00);
+    addrBus = (highByte << 8) | lowByte;
+    dataBus = bus.read(addrBus);
+    return 0;
+}
+
 //
 // Operations
 //
