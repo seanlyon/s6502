@@ -167,6 +167,13 @@ uint8_t S6502::INDY()
     return 0;
 }
 
+uint8_t S6502::IND()
+{
+    uint16_t lowByte = bus.read(programCounter++);
+    uint16_t highByte = bus.read(programCounter++);
+    addrBus = (highByte << 8) | lowByte;
+}
+
 //
 // Operations
 //

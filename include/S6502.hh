@@ -69,6 +69,7 @@ private:
     uint8_t ABSY();
     uint8_t INDX();
     uint8_t INDY();
+    uint8_t IND();
 
 //
 // Operations
