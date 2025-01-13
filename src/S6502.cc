@@ -11,7 +11,8 @@ S6502::S6502(Bus& bus)
         {0xAD, {"LDA", &S6502::ABS, &S6502::LDA, 4}},
         {0xBD, {"LDA", &S6502::ABSX, &S6502::LDA, 4}},
         {0xB9, {"LDA", &S6502::ABSY, &S6502::LDA, 4}},
-        {0xA1, {"LDA", &S6502::INDX, &S6502::LDA, 6}}
+        {0xA1, {"LDA", &S6502::INDX, &S6502::LDA, 6}},
+        {0xB1, {"LDA", &S6502::INDY, &S6502::LDA, 5}}
     };
 }
 
@@ -162,6 +163,7 @@ uint8_t S6502::INDY()
     uint16_t highByte = bus.read(zpAddr) + (sum & 0xFF00);
     addrBus = (highByte << 8) | lowByte;
     dataBus = bus.read(addrBus);
+    // todo: return 1 if page boundary crossed
     return 0;
 }
 
