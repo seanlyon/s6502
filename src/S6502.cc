@@ -114,16 +114,16 @@ uint8_t S6502::ZPY()
 
 uint8_t S6502::ABS()
 {
-    uint16_t lowByte = bus.read(programCounter++);
-    uint16_t highByte = bus.read(programCounter++);
+    uint8_t lowByte = bus.read(programCounter++);
+    uint8_t highByte = bus.read(programCounter++);
     addrBus = (highByte << 8) | lowByte;
     return 0;
 }
 
 uint8_t S6502::ABSX()
 {
-    uint16_t lowByte = bus.read(programCounter++);
-    uint16_t highByte = bus.read(programCounter++);
+    uint8_t lowByte = bus.read(programCounter++);
+    uint8_t highByte = bus.read(programCounter++);
     addrBus = ((highByte << 8) | lowByte) + xIndex;
     // todo: return 1 if page boundary crossed
     return 0;
@@ -131,8 +131,8 @@ uint8_t S6502::ABSX()
 
 uint8_t S6502::ABSY()
 {
-    uint16_t lowByte = bus.read(programCounter++);
-    uint16_t highByte = bus.read(programCounter++);
+    uint8_t lowByte = bus.read(programCounter++);
+    uint8_t highByte = bus.read(programCounter++);
     addrBus = ((highByte << 8) | lowByte) + yIndex;
     // todo: return 1 if page boundary crossed
     return 0;
@@ -141,8 +141,8 @@ uint8_t S6502::ABSY()
 uint8_t S6502::INDX()
 {
     uint16_t addr = (bus.read(programCounter++) + xIndex) & 0x00FF;
-    uint16_t lowByte = bus.read(addr++);
-    uint16_t highByte = bus.read(addr);
+    uint8_t lowByte = bus.read(addr++);
+    uint8_t highByte = bus.read(addr);
     addrBus = (highByte << 8) | lowByte;
     return 0;
 }
@@ -151,8 +151,8 @@ uint8_t S6502::INDY()
 {
     uint16_t zpAddr = bus.read(programCounter++);
     uint16_t sum = bus.read(zpAddr++) + yIndex;
-    uint16_t lowByte = sum & 0x00FF;
-    uint16_t highByte = bus.read(zpAddr) + (sum & 0xFF00);
+    uint8_t lowByte = sum & 0x00FF;
+    uint8_t highByte = bus.read(zpAddr) + (sum & 0xFF00);
     addrBus = (highByte << 8) | lowByte;
     // todo: return 1 if page boundary crossed
     return 0;
@@ -160,8 +160,8 @@ uint8_t S6502::INDY()
 
 uint8_t S6502::IND()
 {
-    uint16_t lowByte = bus.read(programCounter++);
-    uint16_t highByte = bus.read(programCounter++);
+    uint8_t lowByte = bus.read(programCounter++);
+    uint8_t highByte = bus.read(programCounter++);
     addrBus = (highByte << 8) | lowByte;
     return 0;
 }
@@ -179,6 +179,7 @@ uint8_t S6502::IMP()
 uint8_t S6502::REL()
 {
     addrBus = programCounter++;
+    return 0;
 }
 
 //
