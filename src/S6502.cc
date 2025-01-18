@@ -6,6 +6,13 @@ S6502::S6502(Bus& bus)
 {
     opcodes = {
         {0xA9, {"LDA", &S6502::IMM, &S6502::LDA, 2}},
+        {0xA5, {"LDA", &S6502::ZP, &S6502::LDA, 3}},
+        {0xB5, {"LDA", &S6502::ZPX, &S6502::LDA, 4}},
+        {0xAD, {"LDA", &S6502::ABS, &S6502::LDA, 4}},
+        {0xBD, {"LDA", &S6502::ABSX, &S6502::LDA, 4}},
+        {0xB9, {"LDA", &S6502::ABSY, &S6502::LDA, 4}},
+        {0xA1, {"LDA", &S6502::INDX, &S6502::LDA, 6}},
+        {0xB1, {"LDA", &S6502::INDY, &S6502::LDA, 5}}
     };
 }
 
@@ -84,7 +91,94 @@ void S6502::setFlag(StatusFlag flag, bool condition)
 uint8_t S6502::IMM()
 {
     addrBus = programCounter++;
-    dataBus = bus.read(addrBus);
+    return 0;
+}
+
+uint8_t S6502::ZP()
+{
+    addrBus = bus.read(programCounter++);
+    return 0;
+}
+
+uint8_t S6502::ZPX()
+{
+    addrBus = (bus.read(programCounter++) + xIndex) & 0x00FF;
+    return 0;
+}
+
+uint8_t S6502::ZPY()
+{
+    addrBus = (bus.read(programCounter++) + yIndex) & 0x0FF;
+    return 0;
+}
+
+uint8_t S6502::ABS()
+{
+    uint8_t lowByte = bus.read(programCounter++);
+    uint8_t highByte = bus.read(programCounter++);
+    addrBus = (highByte << 8) | lowByte;
+    return 0;
+}
+
+uint8_t S6502::ABSX()
+{
+    uint8_t lowByte = bus.read(programCounter++);
+    uint8_t highByte = bus.read(programCounter++);
+    addrBus = ((highByte << 8) | lowByte) + xIndex;
+    // todo: return 1 if page boundary crossed
+    return 0;
+}
+
+uint8_t S6502::ABSY()
+{
+    uint8_t lowByte = bus.read(programCounter++);
+    uint8_t highByte = bus.read(programCounter++);
+    addrBus = ((highByte << 8) | lowByte) + yIndex;
+    // todo: return 1 if page boundary crossed
+    return 0;
+}
+
+uint8_t S6502::INDX()
+{
+    uint16_t addr = (bus.read(programCounter++) + xIndex) & 0x00FF;
+    uint8_t lowByte = bus.read(addr++);
+    uint8_t highByte = bus.read(addr);
+    addrBus = (highByte << 8) | lowByte;
+    return 0;
+}
+
+uint8_t S6502::INDY()
+{
+    uint16_t zpAddr = bus.read(programCounter++);
+    uint16_t sum = bus.read(zpAddr++) + yIndex;
+    uint8_t lowByte = sum & 0x00FF;
+    uint8_t highByte = bus.read(zpAddr) + (sum & 0xFF00);
+    addrBus = (highByte << 8) | lowByte;
+    // todo: return 1 if page boundary crossed
+    return 0;
+}
+
+uint8_t S6502::IND()
+{
+    uint8_t lowByte = bus.read(programCounter++);
+    uint8_t highByte = bus.read(programCounter++);
+    addrBus = (highByte << 8) | lowByte;
+    return 0;
+}
+
+uint8_t S6502::ACC()
+{
+    return 0;
+}
+
+uint8_t S6502::IMP()
+{
+    return 0;
+}
+
+uint8_t S6502::REL()
+{
+    addrBus = programCounter++;
     return 0;
 }
 
@@ -94,6 +188,7 @@ uint8_t S6502::IMM()
 
 uint8_t S6502::LDA()
 {
+    dataBus = bus.read(addrBus);
     accumulator = dataBus;
     setFlag(Zero, accumulator == 0x00);
     setFlag(Negative, accumulator & 0x80);

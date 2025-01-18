@@ -14,15 +14,6 @@ public:
     void clock();
     void log();
 
-private:
-    void fetch();
-    void decode();
-    void execute();
-
-    Bus bus;
-    uint8_t dataBus;
-    uint16_t addrBus;
-
     enum StatusFlag
     {
         Carry = (1 << 0),
@@ -34,6 +25,15 @@ private:
         Overflow = (1 << 6),
         Negative = (1 << 7)
     };
+
+private:
+    void fetch();
+    void decode();
+    void execute();
+
+    Bus bus;
+    uint8_t dataBus;
+    uint16_t addrBus;
 
     void setFlag(StatusFlag flag, bool condition);
 
@@ -61,6 +61,18 @@ private:
 //
 
     uint8_t IMM();
+    uint8_t ZP();
+    uint8_t ZPX();
+    uint8_t ZPY();
+    uint8_t ABS();
+    uint8_t ABSX();
+    uint8_t ABSY();
+    uint8_t INDX();
+    uint8_t INDY();
+    uint8_t IND();
+    uint8_t ACC();
+    uint8_t IMP();
+    uint8_t REL();
 
 //
 // Operations
